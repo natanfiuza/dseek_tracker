@@ -149,6 +149,11 @@ class TestPeriodosDisponiveis:
         assert (2026, 5) in periodos
 
     def test_sem_ficheiros(self):
-        proc = DataProcessor(data_dir="/tmp/pasta_inexistente_xyz")
-        periodos = proc.periodos_disponiveis()
-        assert periodos == []
+        db, db_path = _db_temporaria()
+        try:
+            proc = DataProcessor(data_dir="/tmp/pasta_inexistente_xyz", db=db)
+            periodos = proc.periodos_disponiveis()
+            assert periodos == []
+        finally:
+            db.fechar()
+            os.remove(db_path)

@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from .database import Database
@@ -170,6 +171,16 @@ class App:
         barras = ax.barh(nomes, tokens, color=cores, edgecolor="#ffffff", linewidth=0.5)
         ax.set_xlabel("Total de Tokens")
         ax.invert_yaxis()
+
+        # Formatador para evitar notação científica no eixo X
+        def _fmt(valor, _pos):
+            if valor >= 1_000_000:
+                return f"{valor / 1_000_000:.1f}M"
+            elif valor >= 1_000:
+                return f"{valor / 1_000:.0f}K"
+            else:
+                return f"{valor:.0f}"
+        ax.xaxis.set_major_formatter(mticker.FuncFormatter(_fmt))
 
         for barra, val in zip(barras, tokens):
             if val >= 1_000_000:

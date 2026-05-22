@@ -159,3 +159,22 @@ class TestExistenciaDatas:
     def test_datas_vazias_sem_dados(self, db_memoria):
         assert db_memoria.datas_uso_existentes() == set()
         assert db_memoria.datas_custo_existentes() == set()
+
+
+class TestPeriodosDisponiveis:
+    """Testes do método periodos_disponiveis na BD."""
+
+    @pytest.fixture
+    def db_com_dados(self, db_memoria, df_usage_sample, df_cost_sample):
+        df_tokens = df_usage_sample[df_usage_sample["type"] != "request_count"]
+        db_memoria.upsert_usage(df_tokens)
+        db_memoria.upsert_costs(df_cost_sample)
+        return db_memoria
+
+    def test_periodos_bd_com_dados(self, db_com_dados):
+        periodos = db_com_dados.periodos_disponiveis()
+        assert (2026, 5) in periodos
+
+    def test_periodos_bd_vazia(self, db_memoria):
+        periodos = db_memoria.periodos_disponiveis()
+        assert periodos == []
