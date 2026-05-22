@@ -35,9 +35,11 @@ dseek_tracker_project/
 - [x] `.gitignore`
 - [x] `Pipfile` com pandas, matplotlib, fpdf2
 - [x] `data/` com CSVs de exemplo (`amount-2026-5.csv`, `cost-2026-5.csv`)
-- [ ] `main.py`
-- [ ] `src/dseek_tracker/` com `__init__.py`, `database.py`, `processor.py`, `gui.py`, `report.py`
-- [ ] `pyproject.toml`
+- [x] `main.py`
+- [x] `src/dseek_tracker/` com `__init__.py`, `database.py`, `processor.py`, `gui.py`, `report.py`
+- [x] `pyproject.toml`
+- [x] `main.spec` (PyInstaller)
+- [x] `MANIFEST.in` (PyPI)
 - [ ] Dev dependencies (pyinstaller, build, twine)
 - [ ] Executável PyInstaller
 
