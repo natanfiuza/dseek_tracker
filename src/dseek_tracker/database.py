@@ -13,6 +13,26 @@ class Database:
         self.db_path = db_path
         self._conexao = sqlite3.connect(db_path)
         self._criar_tabelas()
+        self._migrar_datas()
+
+    def _migrar_datas(self):
+        """Converte datas YYYYMMDD → YYYY-MM-DD nas tabelas usage e costs.
+
+        Executada automaticamente ao abrir a base de dados.
+        Segura para execuções repetidas — só converte datas com 8 dígitos.
+        """
+        cur = self._conexao.cursor()
+        # usage
+        cur.execute(
+            "UPDATE usage SET utc_date = substr(utc_date,1,4) || '-' || substr(utc_date,5,2) || '-' || substr(utc_date,7,2) "
+            "WHERE length(utc_date) = 8 AND utc_date NOT LIKE '%-%'"
+        )
+        # costs
+        cur.execute(
+            "UPDATE costs SET utc_date = substr(utc_date,1,4) || '-' || substr(utc_date,5,2) || '-' || substr(utc_date,7,2) "
+            "WHERE length(utc_date) = 8 AND utc_date NOT LIKE '%-%'"
+        )
+        self._conexao.commit()
 
     def _criar_tabelas(self):
         cur = self._conexao.cursor()
